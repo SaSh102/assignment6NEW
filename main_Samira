@@ -1,0 +1,159 @@
+from pyfiglet import Figlet
+
+f= Figlet(font="standard")
+print(f.renderText("Samira Store"))
+
+my_list=[]
+myfile = open("database.txt","r")
+data = myfile.read().lower().split("\n")
+for i in range(len(data)):
+    product_info = data[i].split(',')
+    my_dic = {}
+    my_dic['id']= product_info[0]
+    my_dic['name']= product_info[1]
+    my_dic['price']= product_info[2]
+    my_dic['count']= product_info[3]
+    my_list.append(my_dic)
+
+def show_menu():
+    print("1- Add Product")
+    print("2- Edit Product")
+    print("3- Delete Product")
+    print("4- Search")
+    print("5- Show List")
+    print("6- Buy")
+    print("7- Exit")
+
+
+def Add_product():
+    while True:
+        dic_add={}
+        add_product = input("Do you want to add a product? (y/n) ")
+
+        if add_product == "n":
+            break
+        elif add_product == "y":
+            dic_add["id"]= input("Please enter Id: ")
+            dic_add["name"]= input("please enter name: ")
+            dic_add["price"]= input("Please enter price: ")
+            dic_add["count"]= input("Please enter the product number: ")
+            print("Product added")
+            my_list.append(dic_add)
+
+def Edit_product():
+    while True:
+        edit_product = input("Do you want to edit a product information? (y/n) ")
+        if edit_product == "y":
+            print("1- Edit id")
+            print("2- Edit name")
+            print("3- Edit price")
+            print("4- Edit count")
+
+            edit_pro = input("Please enter the operation code: ")
+            print(my_list)
+            choice_Edit = int(input("Please enter the product (0 to count of product): "))
+            if edit_pro=="1":
+                my_list[choice_Edit]["id"]= input("Please enter your Id for edit= ")
+            elif edit_pro=="2":
+                my_list[choice_Edit]["name"]= input("Please enter your name for edit= ")
+            elif edit_pro=="3":
+                my_list[choice_Edit]["price"]= input("Please enter your price for edit= ")
+            elif edit_pro=="4":
+                my_list[choice_Edit]["count"]= input("Please enter your count for edit= ")
+            print("The product was edited")
+
+        elif edit_product == "n":
+            break
+
+def Delete_product():
+    while True:
+        delete_product = input("Do you want to delete the product? (y/n) ")
+
+        if delete_product == "n":
+             break
+        elif delete_product == "y":
+            choice_Delete = input("Please enter your product Id for delete: ")
+            for i in range(len(my_list)):
+                if my_list[i]["id"]==choice_Delete:
+                    my_list.pop(i)
+                    print("The product has been deleted")
+                    break 
+
+def Search_product():
+    while True:
+        search_product = input("Do you want to search for a product? (y/n) ")
+        if search_product == "n":
+            break
+        elif search_product == "y":
+            namePro = input("Please Enter Name of product: ")
+            for i in range(len(my_list)):
+                if my_list[i]["name"]==namePro:
+                    print("Your Search is Ok")
+                    print({"id":my_list[i]["id"]
+                          ,"name":my_list[i]["name"]
+                          ,"price":my_list[i]["price"]
+                          ,"count":my_list[i]["count"]})
+                    break
+                else:
+                    print("sorry. product not available")
+                    break
+
+def Buy_product():
+    Total_price=0
+    count=0
+    factor=[]
+    while True:
+        
+        buy_product = input("Do you want to buy a product? (y/n) ")
+        if buy_product == "y":
+            print(my_list)
+            IDforBUY = input("Please enter the product Id= ")
+            for i in range(len(my_list)):
+                if my_list[i]["id"] == IDforBUY:
+                    print("Your product is available")
+                    count_buy = int(input("Please enter count of product= "))
+                    count = float(my_list[i]["count"])
+                    price = float(my_list[i]["price"])
+                    # if count_buy == count:
+                    Total_price = (int(count_buy) * int(price))
+                    if int(count - count_buy) >> 0:
+                        my_list[i]["count"]= int(count - count_buy)
+                    print("Your Factor is=")
+                    fact={"price":my_list[i]["price"]
+                        ,"count":str(count_buy)
+                        ,"sum_price":float(Total_price)}
+                    factor.append(fact)
+                    print(factor)
+                    break
+            else: 
+                print("Error")
+        elif buy_product == "n":
+            break
+
+while True:
+
+    show_menu()
+
+    choice = input("Please choose a number of menu= ")
+
+    if choice =="1":
+        Add_product()
+
+    elif choice =="2":
+        Edit_product()
+
+    elif choice =="3":
+        Delete_product()
+
+    elif choice =="4":
+        Search_product()
+
+    elif choice =="5":
+        print(my_list)
+        print(len(my_list))
+
+    elif choice == "6":
+        Buy_product()
+
+    elif choice =="7":
+        exit()
